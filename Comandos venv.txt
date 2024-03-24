@@ -1,0 +1,9 @@
+
+# ativa o ambiente virtual no power shel
+.\aplicativoKivy\Scripts\activate.ps1
+
+# ativa o ambiente virtual no cmd
+.\aplicativoKivy\Scripts\activate.bat
+
+# desativa o ambiente
+deactivate
