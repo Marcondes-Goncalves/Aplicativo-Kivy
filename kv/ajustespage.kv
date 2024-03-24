@@ -4,17 +4,79 @@
 
         canvas:
             Rectangle:
-                size:self.size
+                size: self.size
                 pos: self.pos
                 source: "icones/bg1.png"
                 
         Label:
-            pos_hint: {"right": 1, "top": 1}
-            size_hint: 1, 0.85
-            text: "Pagina de ajustes"
+            # o .before só é necessário caso a imagem tampe o texto!!
+            canvas.before:
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+                    source: "icones/botao_fino.png"
 
-        Button:
-            pos_hint: {"right": 0.33, "top": 0.15}
-            size_hint: 0.33, 0.15
-            text: "Voltar"
-            on_release: app.mudarTela("homepage")
+            pos_hint: {"right": 0.85, "top": 0.95}
+            size_hint: 0.7, 0.2
+            text: "Seu ID único: 1"
+            bold: True
+            id: idVendedor
+
+        # Ação mudar foto de perfil clicando na imagem ou no label
+        ImageButton:
+            pos_hint: {"right": 0.5, "top": 0.7}
+            size_hint: 0.5, 0.15
+            source: "icones/foto_perfil.png"
+            on_release: print("Ir para tela mudar foto de perfil")
+
+        LabelButton:
+            pos_hint: {"right": 0.9, "top": 0.7}
+            size_hint: 0.5, 0.15
+            text: "Mudar Foto de Perfil"
+            on_release: print("Ir para tela mudar foto de perfil")
+        # Fim ação mudar foto de perfil
+
+        # Ação adicionar vendedor clicando na imagem ou no label
+        ImageButton:
+            pos_hint: {"right": 0.5, "top": 0.5}
+            size_hint: 0.5, 0.15
+            source: "icones/adicionar_vendedor.png"
+            on_release: print("Ir para tela acompanhar vendedor")
+
+        LabelButton:
+            pos_hint: {"right": 0.9, "top": 0.5}
+            size_hint: 0.5, 0.15
+            text: "Acompanhar vendedor"
+            on_release: print("Ir para tela acompanhar vendedor")
+        # Fim ação adicionar vendedor
+
+        # Ação ver todas as vendas clicando na imagem ou no label
+        ImageButton:
+            pos_hint: {"right": 0.5, "top": 0.3}
+            size_hint: 0.5, 0.15
+            source: "icones/vendas_empresa.png"
+            on_release: print("Ir para tela ver todas as vendas")
+
+        LabelButton:
+            pos_hint: {"right": 0.9, "top": 0.3}
+            size_hint: 0.5, 0.15
+            text: "Ver Todas as Vendas"
+            on_release: print("Ir para tela ver todas as vendas")
+
+        # Botão voltar para Home Page
+        FloatLayout:
+            pos_hint: {"right": 1, "top": 0.12}
+            size_hint: 1, 0.12
+
+            canvas:
+                Color:
+                    rgb: utils.get_color_from_hex("#006D7E")
+                Rectangle:
+                    size:self.size
+                    pos: self.pos
+
+            ImageButton:
+                pos_hint: {"right": 0.2, "top": 0.9}
+                size_hint: 0.2, 0.8
+                source: "icones/voltar.png"
+                on_release: app.mudarTela("homepage")
