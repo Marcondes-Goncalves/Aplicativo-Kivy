@@ -6,6 +6,8 @@ from kivy.uix.screenmanager import Screen
 class HomePage(Screen):
     pass
 
+class AjustesPage(Screen):
+    pass
 
 
 # No arquivo kv está escrito a nossa interface
@@ -17,6 +19,11 @@ class MainApp(App):
 
     def on_start(self):
         pass
+
+    # o Pylance não está reconhecendo o parâmetro ids, mas está funcionando.
+    def mudarTela(self, idTela):
+        gerenciadorTelas = self.root.ids["screen_manager"]
+        gerenciadorTelas.current = idTela
 
 MainApp().run()
 
