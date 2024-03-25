@@ -1,7 +1,7 @@
 
+# Para criarmos uma tela primeiro primeiro temos que importala do nosso arquivo main.kv que contém o ScreenManager
 <AjustesPage>:
     FloatLayout:
-
         canvas:
             Rectangle:
                 size: self.size
@@ -19,10 +19,12 @@
             pos_hint: {"right": 0.85, "top": 0.95}
             size_hint: 0.7, 0.2
             text: "Seu ID único: 1"
-            bold: True
+            bold: True # para deixar o texto em negrito
             id: idVendedor
 
         # Ação mudar foto de perfil clicando na imagem ou no label
+        # Classe personalizada que criamos no arquivo botoes.py
+        # Com essa classe é possivel fazer com que um texto ou uma iamagem tenha a mesma função de um botão
         ImageButton:
             pos_hint: {"right": 0.5, "top": 0.7}
             size_hint: 0.5, 0.15

@@ -23,7 +23,8 @@ class MainApp(App):
         Parâmetro:
             Essa função recebe o id da tela para mudar de tela.
         """
-        gerenciadorTelas = self.root.ids["screen_manager"]
+        # ScreenManager é um gerenciador de telas e por meio dele podemos alternar entre telas
+        gerenciadorTelas = self.root.ids["screen_manager"] # Por meio do ScreenManager que foi definido no arquivo main.kv, podemos alternar entre telas.
         gerenciadorTelas.current = idTela
 
 

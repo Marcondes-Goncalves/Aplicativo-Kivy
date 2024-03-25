@@ -1,30 +1,37 @@
+# precisamos importar as nossas telas para podermos gerencialas no ScreenManager
+
 #:include kv/homepage.kv
 #:include kv/AjustesPage.kv
 
+# lib do kivy para alterarmos a cor de fundo do bg
 #:import utils kivy.utils
 
 
 ## Os objetos que estiverem dentro de um FloatLayout precisam de um pos_hint e size_hint
-
 FloatLayout:
 
+    # Definindo a cor de fundo do nosso FloatLayout 
     canvas:
-        Color:
+        Color: # para utilizar a função utils.get_color_from_hex(") que alterar a cor de fundo, precisamos importar a lib do kivy: #:import utils kivy.utils
             rgb: utils.get_color_from_hex("#001824")
         Rectangle:
-            size:self.size
-            pos: self.pos
+            size:self.size # com esse parâmetro estamos definindo que toda a tela será preenchida com a cor ou imagem definida 
+            pos: self.pos  # com esse parâmetro estamos definindo que toda a tela será preenchida com a cor ou imagem definida 
 
+    # Adicionando um icone no centro do nosso FloatLayout
     Image:
         pos_hint: {"right": 1,"top": 0.9}
         size_hint: 1, 0.2
         source: "icones/hash.png"
 
+    # Gerenciador de telas!
+    # Todas as nossas telas ficarão dentro do ScreenManager para que possamos alternar entre elas.
     ScreenManager:
         pos_hint: {"right": 1,"top": 0.7}
         size_hint: 1, 0.7
         id: screen_manager  
 
+        # Classes das telas  que foram criadas no arquivo telas.py
         HomePage:
             name: "homepage"
             id: homepage

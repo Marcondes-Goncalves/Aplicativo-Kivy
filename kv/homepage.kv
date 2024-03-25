@@ -1,24 +1,55 @@
 
+# Para criarmos uma tela primeiro primeiro temos que importala do nosso arquivo main.kv que contém o ScreenManager
 <HomePage>:
     FloatLayout:
-
         canvas:
             Rectangle:
                 size:self.size
                 pos: self.pos
                 source: "icones/bg1.png"
 
-        LabelButton:
-            pos_hint: {"right": 1, "top": 1}
-            size_hint: 1, 0.85
-            text: "Estou na HomePage - ir para pagina ajustes"
-            on_release: app.mudarTela("ajustespage")
+        Label:
+            # o .before só é necessário caso a imagem tampe o texto!!
+            canvas.before:
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+                    source: "icones/botao_fino.png"
 
+            pos_hint: {"right": 0.85, "top": 0.95}
+            size_hint: 0.7, 0.2
+            text: "Total de Vendas: R$1"
+            id: label_total_vendas
+            markup: True # o markup = True nos permite editar a fonte dos textos parcialmente
 
-        Button:
-            pos_hint: {"right": 1, "top": 0.15}
-            size_hint: 0.33, 0.15
-            text: "Ir para ajustes"
-            on_release: app.mudarTela("ajustespage")
+        # ScrollView é um elemento que permite rolar a tela
+        # Lista de Vendas
+        ScrollView:
+            pos_hint: {"right": 1, "top": 0.75}
+            size_hint: 1, 0.63
+            
+        # 3 botões da homepage
+        GridLayout: # o GridLayout ajustes os elementos proporcionalmente na tela e como ele está dentro de um FloatLayout temos que passar o pos_hint e size_hint
+            rows: 1 # todo GridLayout tem que ter pelo menos uma linha!
+            pos_hint: {"right": 1, "top": 0.12}
+            size_hint: 1, 0.12
+
+            canvas:
+                Color:
+                    rgb: utils.get_color_from_hex("#006D7E")
+                Rectangle:
+                    size:self.size
+                    pos: self.pos
+
+            # como os nossos botões estão dentro do GridLayout não precisamos passar o pos_hint e size_hint
+            ImageButton:
+                source: "icones/add.png"
+                on_release: print("Adicionar venda")
+            ImageButton:
+                source: "icones/salesman.png"
+                on_release: print("Lista de vendedores")
+            ImageButton:
+                source: "icones/settings.png"
+                on_release: app.mudarTela("ajustespage")
 
 
