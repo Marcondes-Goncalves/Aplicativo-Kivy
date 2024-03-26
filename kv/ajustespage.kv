@@ -29,13 +29,13 @@
             pos_hint: {"right": 0.5, "top": 0.7}
             size_hint: 0.5, 0.15
             source: "icones/foto_perfil.png"
-            on_release: print("Ir para tela mudar foto de perfil")
+            on_release: app.mudarTela("fotoperfilpage")
 
         LabelButton:
             pos_hint: {"right": 0.9, "top": 0.7}
             size_hint: 0.5, 0.15
             text: "Mudar Foto de Perfil"
-            on_release: print("Ir para tela mudar foto de perfil")
+            on_release: app.mudarTela("fotoperfilpage")
         # Fim ação mudar foto de perfil
 
         # Ação adicionar vendedor clicando na imagem ou no label
@@ -43,13 +43,13 @@
             pos_hint: {"right": 0.5, "top": 0.5}
             size_hint: 0.5, 0.15
             source: "icones/adicionar_vendedor.png"
-            on_release: print("Ir para tela acompanhar vendedor")
+            on_release: app.mudarTela("adicionarvendedorpage")
 
         LabelButton:
             pos_hint: {"right": 0.9, "top": 0.5}
             size_hint: 0.5, 0.15
             text: "Acompanhar vendedor"
-            on_release: print("Ir para tela acompanhar vendedor")
+            on_release: app.mudarTela("adicionarvendedorpage")
         # Fim ação adicionar vendedor
 
         # Ação ver todas as vendas clicando na imagem ou no label
@@ -57,13 +57,13 @@
             pos_hint: {"right": 0.5, "top": 0.3}
             size_hint: 0.5, 0.15
             source: "icones/vendas_empresa.png"
-            on_release: print("Ir para tela ver todas as vendas")
+            on_release: app.mudarTela("todasvendaspage")
 
         LabelButton:
             pos_hint: {"right": 0.9, "top": 0.3}
             size_hint: 0.5, 0.15
             text: "Ver Todas as Vendas"
-            on_release: print("Ir para tela ver todas as vendas")
+            on_release: app.mudarTela("todasvendaspage")
 
         # Botão voltar para Home Page
         FloatLayout:

@@ -13,9 +13,6 @@ class MainApp(App):
     def build(self):
         return GUI
 
-    def on_start(self):
-        pass
-
     # o Pylance não está reconhecendo o parâmetro ids, mas está funcionando.
     def mudarTela(self, idTela: str):
         """Função para mudar de tela

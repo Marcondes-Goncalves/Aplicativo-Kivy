@@ -44,10 +44,10 @@
             # como os nossos botões estão dentro do GridLayout não precisamos passar o pos_hint e size_hint
             ImageButton:
                 source: "icones/add.png"
-                on_release: print("Adicionar venda")
+                on_release: app.mudarTela("adicionarvendaspage")
             ImageButton:
                 source: "icones/salesman.png"
-                on_release: print("Lista de vendedores")
+                on_release: app.mudarTela("listarvendedorespage")
             ImageButton:
                 source: "icones/settings.png"
                 on_release: app.mudarTela("ajustespage")

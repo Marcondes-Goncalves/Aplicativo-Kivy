@@ -1,7 +1,11 @@
 # precisamos importar as nossas telas para podermos gerencialas no ScreenManager
-
 #:include kv/homepage.kv
-#:include kv/AjustesPage.kv
+#:include kv/ajustespage.kv
+#:include kv/adicionarvendaspage.kv
+#:include kv/adicionarvendedorpage.kv
+#:include kv/fotoperfilpage.kv
+#:include kv/listarvendedorespage.kv
+#:include kv/todasvendaspage.kv
 
 # lib do kivy para alterarmos a cor de fundo do bg
 #:import utils kivy.utils
@@ -32,6 +36,7 @@ FloatLayout:
         id: screen_manager  
 
         # Classes das telas  que foram criadas no arquivo telas.py
+        # OBS: a minha tela principal tem que vir antes das outras, nesse caso a HomePage
         HomePage:
             name: "homepage"
             id: homepage
@@ -39,3 +44,23 @@ FloatLayout:
         AjustesPage:
             name: "ajustespage"
             id: ajustespage
+
+        AdicionarVendasPage:
+            name: "adicionarvendaspage"
+            id: adicionarvendaspage
+
+        AdicionarVendedorPage:
+            name: "adicionarvendedorpage"
+            id: adicionarvendedorpage
+
+        FotoPerfilPage:
+            name: "fotoperfilpage"
+            id: fotoperfilpage
+
+        ListarVendedoresPage:
+            name: "listarvendedorespage"
+            id: listarvendedorespage
+
+        TodasVendasPage:
+            name: "todasvendaspage"
+            id: todasvendaspage
