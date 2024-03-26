@@ -1,0 +1,57 @@
+# precisamos importar as nossas telas para podermos gerencialas no ScreenManager
+#:include kv/homepage.kv
+#:include kv/ajustespage.kv
+#:include kv/adicionarvendaspage.kv
+#:include kv/adicionarvendedorpage.kv
+#:include kv/fotoperfilpage.kv
+#:include kv/listarvendedorespage.kv
+#:include kv/todasvendaspage.kv
+
+# lib do kivy para alterarmos a cor de fundo do bg
+#:import utils kivy.utils
+
+
+# Definindo a cor de fundo do nosso FloatLayout 
+FloatLayout:
+    canvas:
+        Rectangle:
+            size:self.size
+            pos: self.pos
+            source: "icones/bg1.png"
+
+    Label:
+            # o .before só é necessário caso a imagem tampe o texto!!
+        canvas.before:
+            Rectangle:
+                size: self.size
+                pos: self.pos
+                source: "icones/botao_fino.png"
+
+        pos_hint: {"right": 0.85, "top": 0.95}
+        size_hint: 0.7, 0.2
+        text: "Total de Vendas: R$1000"
+        id: label_total_vendas
+        markup: True # o markup = True nos permite editar a fonte dos textos parcialmente
+
+        # ScrollView é um elemento que permite rolar a tela
+        # Lista de Vendas
+    ScrollView:
+        pos_hint: {"right": 1, "top": 0.75}
+        size_hint: 1, 0.63
+            
+        # 3 botões da homepage
+    GridLayout: # o GridLayout ajustes os elementos proporcionalmente na tela e como ele está dentro de um FloatLayout temos que passar o pos_hint e size_hint
+        rows: 1 # todo GridLayout tem que ter pelo menos uma linha!
+        pos_hint: {"right": 1, "top": 0.12}
+        size_hint: 1, 0.12
+
+        canvas:
+            Color:
+                rgb: utils.get_color_from_hex("#006D7E")
+            Rectangle:
+                size:self.size
+                pos: self.pos
+
+            # como os nossos botões estão dentro do GridLayout não precisamos passar o pos_hint e size_hint
+         
+

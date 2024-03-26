@@ -27,6 +27,15 @@
         ScrollView:
             pos_hint: {"right": 1, "top": 0.75}
             size_hint: 1, 0.63
+            GridLayout:
+                cols: 1 # colunas
+                # não precizamos passar a qtd de linhas, pois elas serão adicionadas automaticamente, na medida em que adicionamos itens na lista
+                id: lista_vendas
+                # os 4 parâmetros abaixo sempre terão que ser passados quando criamos um ScrollView
+                size_hint_y: None
+                height: self.minimum_height
+                row_default_height: "90dp" # 90dp é o tamanho dos banners dentro do ScrollView
+                row_force_default: True
             
         # 3 botões da homepage
         GridLayout: # o GridLayout ajustes os elementos proporcionalmente na tela e como ele está dentro de um FloatLayout temos que passar o pos_hint e size_hint
