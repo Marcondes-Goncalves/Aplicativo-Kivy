@@ -2,11 +2,13 @@
 from kivy.app import App
 from kivy.lang import Builder
 
-from telas import *
-from botoes import *
-
 # API para fazer requisições
 import requests
+
+from telas import *
+from botoes import *
+from bannervenda import *
+
 
 # No arquivo kv está escrito o nosso gerenciador de telas
 GUI = Builder.load_file("main.kv")
@@ -30,10 +32,22 @@ class MainApp(App):
 
         try: # preencher lista de vendas
             vendas = requisicao_dic['vendas'][1:] # pegando as vendas da lista de vendas que tenha uma ou mais vendas 
+
             for venda in vendas:
-                print(venda)
+                # print(venda)  # Pegando is itens pela chave do Dicionario vendas e instânciando a nossa classe
+                banner = BannerVenda(clientes = venda['cliente'], foto_cliente = venda['foto_cliente'], produto = venda['produto'],
+                         foto_produto = venda['foto_produto'], data = venda['data'], preco = venda['preco'], unidade = venda['unidade'],
+                         quantidade = venda['quantidade'])
+                
+                # Recuperando todos os ids da pagina homepage
+                pagina_homepage = self.root.ids['homepage']
+                # Selecionando apenas o id lista_vendas
+                lista_vendas = pagina_homepage.ids['lista_vendas']
+                # Adicionando o nosso banner a lista de vendas
+                lista_vendas.add_widget(banner)
+
         except:
-            pass
+            pass 
 
 
         # pegando o avatar da requisição por meio da chave do dicionario ['avatar']
