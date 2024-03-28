@@ -8,6 +8,9 @@ import requests
 
 import os
 
+# o partial permite passar um parâmetro para uma função que está sendo passado  como parametro de um botão
+from functools import partial
+
 from telas import *
 from botoes import *
 from bannervenda import *
@@ -34,8 +37,8 @@ class MainApp(App):
         pagina_fotoperfil = self.root.ids['fotoperfilpage'] # type: ignore[Unknown]
         lista_fotos = pagina_fotoperfil.ids['lista_fotos_perfil']
 
-        for foto in arquivos:
-            imagem = ImageButton(source = f'icones/fotos_perfil/{foto}', on_release = self.mudar_foto_perfil)
+        for foto in arquivos: # o partial permite passar um parâmetro para uma função que está sendo passado  como parametro de um botão
+            imagem = ImageButton(source = f'icones/fotos_perfil/{foto}', on_release = partial( self.mudar_foto_perfil, foto))
 
             lista_fotos.add_widget(imagem)
 
@@ -87,8 +90,20 @@ class MainApp(App):
         gerenciadorTelas.current = idTela
 
 
-    def mudar_foto_perfil(self, *args):
-        print('Mudar foto perfil')
+    def mudar_foto_perfil(self, foto, *args):
+        # selecionando o id foto_perfil do meu arquivo main.kv
+        foto_perfil = self.root.ids["foto_perfil"] # type: ignore[Unknown]
+        # alterando o source com a nova foto de perfil que veio da requisição
+        foto_perfil.source = f"icones/fotos_perfil/{foto}"
+
+        # editaremos o campo  avatar com a nova foto
+        # OBS: o dado que será passado para o banco tem que ser convertido no padrão abaixo
+        info = f'{{"avatar": "{foto}"}}'
+
+        requests.patch(f'https://aplicativovendashash-b0c09-default-rtdb.firebaseio.com/{self.id_usuario}.json', 
+                                    data = info)
+        
+        self.mudarTela('ajustespage')
 
 
 MainApp().run()
