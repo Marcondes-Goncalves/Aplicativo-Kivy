@@ -1,4 +1,5 @@
 
+from sys import exception
 from kivy.app import App
 from kivy.lang import Builder
 
@@ -31,11 +32,12 @@ class MainApp(App):
         requisicao_dic = requisicao.json()
 
         try: # preencher lista de vendas
-            vendas = requisicao_dic['vendas'][1:] # pegando as vendas da lista de vendas que tenha uma ou mais vendas 
-
+            vendas = requisicao_dic['vendas'][1:] # retorna uma lista de dicionario que contém a informação das vendas de cada cliente
+            # print(f'Vendas: {vendas}')
+            # print('\n')
             for venda in vendas:
-                # print(venda)  # Pegando is itens pela chave do Dicionario vendas e instânciando a nossa classe
-                banner = BannerVenda(clientes = venda['cliente'], foto_cliente = venda['foto_cliente'], produto = venda['produto'],
+                # Pegando as chaves e o valores de cada dicionario venda e instânciando a nossa classe
+                banner = BannerVenda(cliente = venda['cliente'], foto_cliente = venda['foto_cliente'], produto = venda['produto'],
                          foto_produto = venda['foto_produto'], data = venda['data'], preco = venda['preco'], unidade = venda['unidade'],
                          quantidade = venda['quantidade'])
                 
@@ -46,8 +48,11 @@ class MainApp(App):
                 # Adicionando o nosso banner a lista de vendas
                 lista_vendas.add_widget(banner)
 
+                # print(f'Venda: {venda}')
+                # print('\n')
+
         except:
-            pass 
+            pass
 
 
         # pegando o avatar da requisição por meio da chave do dicionario ['avatar']
