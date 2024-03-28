@@ -6,6 +6,8 @@ from kivy.lang import Builder
 # API para fazer requisições
 import requests
 
+import os
+
 from telas import *
 from botoes import *
 from bannervenda import *
@@ -26,51 +28,67 @@ class MainApp(App):
     # Essa função é executada na inicialização do aplicativo
     def on_start(self):
 
+        # carregar as fotos de perfil
+        arquivos = os.listdir("icones/fotos_perfil")
+
+        pagina_fotoperfil = self.root.ids['fotoperfilpage'] # type: ignore[Unknown]
+        lista_fotos = pagina_fotoperfil.ids['lista_fotos_perfil']
+
+        for foto in arquivos:
+            imagem = ImageButton(source = f'icones/fotos_perfil/{foto}', on_release = self.mudar_foto_perfil)
+
+            lista_fotos.add_widget(imagem)
+
+
+        #carrega as infos do usuário
+        self.carregar_infos_usuario()
+
+
+    def carregar_infos_usuario(self):
         # as nossas requisições tem que terminar com .json no final do link para podermos manipular com python
         requisicao = requests.get(f"https://aplicativovendashash-b0c09-default-rtdb.firebaseio.com/{self.id_usuario}.json") # pegando as informaçõs do usuário
         # pegando o json e transformando em um dicionario
-        requisicao_dic = requisicao.json()
+        requisicao_dic:dict = requisicao.json()
+
+        # pegando o avatar da requisição por meio da chave do dicionario ['avatar']
+        avatar = requisicao_dic['avatar']
+        # selecionando o id foto_perfil do meu arquivo main.kv
+        foto_perfil = self.root.ids["foto_perfil"] # type: ignore[Unknown]
+        # alterando o source com a nova foto de perfil que veio da requisição
+        foto_perfil.source = f"icones/fotos_perfil/{avatar}"
 
         try: # preencher lista de vendas
             vendas = requisicao_dic['vendas'][1:] # retorna uma lista de dicionario que contém a informação das vendas de cada cliente
-            # print(f'Vendas: {vendas}')
-            # print('\n')
+
+            # Recuperando todos os ids da pagina homepage
+            pagina_homepage = self.root.ids['homepage'] # type: ignore[Unknown]
+            # Selecionando apenas o id lista_vendas
+            lista_vendas = pagina_homepage.ids['lista_vendas']
+            
             for venda in vendas:
                 # Pegando as chaves e o valores de cada dicionario venda e instânciando a nossa classe
                 banner = BannerVenda(cliente = venda['cliente'], foto_cliente = venda['foto_cliente'], produto = venda['produto'],
                          foto_produto = venda['foto_produto'], data = venda['data'], preco = venda['preco'], unidade = venda['unidade'],
                          quantidade = venda['quantidade'])
-                
-                # Recuperando todos os ids da pagina homepage
-                pagina_homepage = self.root.ids['homepage']
-                # Selecionando apenas o id lista_vendas
-                lista_vendas = pagina_homepage.ids['lista_vendas']
+            
                 # Adicionando o nosso banner a lista de vendas
                 lista_vendas.add_widget(banner)
 
-                # print(f'Venda: {venda}')
-                # print('\n')
-
-        except:
-            pass
-
-
-        # pegando o avatar da requisição por meio da chave do dicionario ['avatar']
-        avatar = requisicao_dic['avatar']
-        # selecionando o id foto_perfil do meu arquivo main.kv
-        foto_perfil = self.root.ids["foto_perfil"]
-        # alterando o source com a nova foto de perfil que veio da requisição
-        foto_perfil.source = f"icones/fotos_perfil/{avatar}"
+        except Exception as e:
+            print(f'Erro: {e}')
 
 
     # o Pylance não está reconhecendo o parâmetro ids, mas está funcionando.
     def mudarTela(self, idTela: str):
         # Essa função recebe o id da tela para mudar de tela.
-  
         # Por meio do ScreenManager que foi definido no arquivo main.kv, podemos alternar entre telas.
         # self.root é o arquivo que carregamos na nossa GUI ou seja o main.kv
-        gerenciadorTelas = self.root.ids["screen_manager"]
+        gerenciadorTelas = self.root.ids["screen_manager"] # type: ignore[Unknown]
         gerenciadorTelas.current = idTela
+
+
+    def mudar_foto_perfil(self, *args):
+        print('Mudar foto perfil')
 
 
 MainApp().run()

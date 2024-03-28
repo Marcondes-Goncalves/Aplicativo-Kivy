@@ -18,10 +18,11 @@ class BannerVenda(GridLayout): # Por padrão a nossa classe será um GridLayout
 
 
         # escrevendo o nosso fundo do ScrollView 
-        with self.canvas:
+        with self.canvas: # type: ignore[Unknown]
             Color(rgb=(0, 0, 0, 1))
             self.rec = Rectangle(size = self.size, pos = self.pos)
-        self.bind(pos = self.atualizar_rec, size = self.atualizar_rec) # bind é responsalvel por atualizar o nosso Rectangle uma vez que o usuário altera o tamanho da tela
+        self.bind(pos = self.atualizar_rec, size = self.atualizar_rec) # # type: ignore[Unknown]
+        # bind é responsalvel por atualizar o nosso Rectangle uma vez que o usuário altera o tamanho da tela
 
         # pegando os valores por meio da chave do dicionario que foi passado para o nosso construtor __init__
         cliente      = kwargs['cliente'     ]
@@ -59,13 +60,13 @@ class BannerVenda(GridLayout): # Por padrão a nossa classe será um GridLayout
 
         # Aqui estamos referenciando a nossa própria classe e adicionando 3 FloatLayout a ela,
         self.add_widget(esquerda)
-        self.add_widget(meio)
-        self.add_widget(direita)
+        self.add_widget(meio    )
+        self.add_widget(direita )
 
 
     # Função que atualiza o retangulo quando o usuario altera o tamanho da tela
     def atualizar_rec(self, *args):
-        self.rec.pos = self.pos
+        self.rec.pos  = self.pos
         #print('atualizou o self.rec.pos')
         self.rec.size = self.size
         #print('atualizou o self.rec.size')

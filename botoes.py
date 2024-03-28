@@ -2,7 +2,7 @@ from kivy.uix.image import Image
 from kivy.uix.label import Label
 from kivy.uix.button import ButtonBehavior
 
-class ImageButton(ButtonBehavior, Image):
+class ImageButton(ButtonBehavior, Image): # type: ignore[Unknown]
     """Classe personalizada
 
     Desc:
@@ -11,7 +11,7 @@ class ImageButton(ButtonBehavior, Image):
     pass
 
 
-class LabelButton(ButtonBehavior, Label):
+class LabelButton(ButtonBehavior, Label): # type: ignore[Unknown]
     """Classe personalizada
 
     Desc:

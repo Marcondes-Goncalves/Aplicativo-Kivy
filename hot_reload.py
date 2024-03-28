@@ -8,7 +8,7 @@ class HotReload(MDApp):
     ARQUIVOS_KV = ['testeHotReload.kv']
     DEBUG = True
 
-    def build_app(self):
+    def build_app(self): # type: ignore[Unknown]
         return Builder.load_file('testeHotReload.kv')
 
 

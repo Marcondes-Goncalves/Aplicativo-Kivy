@@ -9,9 +9,23 @@
                 
         Label:
             pos_hint: {"right": 0.85, "top": 0.95}
-            size_hint: 0.7, 0.2
-            text: "Foto Perfil Page"
+            size_hint: 0.7, 0.1
+            text: "Selecione sua foto de perfil"
             
+        #lista de imagens
+        ScrollView:
+            pos_hint: {"right": 0.9, "top": 0.85}
+            size_hint: 0.8, 0.73
+            GridLayout:
+                cols: 3
+                id: lista_fotos_perfil
+                # os 4 parâmetros abaixo sempre terão que ser passados quando criamos um ScrollView
+                size_hint_y: None
+                spacing: 5, 5
+                height: self.minimum_height
+                row_default_height: "90dp" # 90dp é o tamanho dos banners dentro do ScrollView
+                row_force_default: True
+
         # Botão voltar para Home Page
         FloatLayout:
             pos_hint: {"right": 1, "top": 0.12}
@@ -28,5 +42,5 @@
                 pos_hint: {"right": 0.2, "top": 0.9}
                 size_hint: 0.2, 0.8
                 source: "icones/voltar.png"
-                on_release: app.mudarTela("homepage")
+                on_release: app.mudarTela("ajustespage")
                 
