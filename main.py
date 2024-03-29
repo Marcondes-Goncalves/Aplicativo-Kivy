@@ -39,7 +39,7 @@ class MainApp(App):
 
         for foto in arquivos: # o partial permite passar um parâmetro para uma função que está sendo passado  como parametro de um botão
             imagem = ImageButton(source = f'icones/fotos_perfil/{foto}', on_release = partial( self.mudar_foto_perfil, foto))
-
+            
             lista_fotos.add_widget(imagem)
 
 
@@ -107,3 +107,4 @@ class MainApp(App):
 
 
 MainApp().run()
+

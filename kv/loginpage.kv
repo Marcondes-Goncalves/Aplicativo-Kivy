@@ -1,0 +1,61 @@
+
+<LoginPage>
+    FloatLayout:
+        canvas:
+            Rectangle:
+                size: self.size
+                pos: self.pos
+                source: "icones/bg1.png"
+                
+        Label:
+            pos_hint: {"right": 0.9, "top": 0.9}
+            size_hint: 0.8, 0.2
+            text: "CONTROLE DE [color=#00CFDB]VENDAS HASHTAG[/color]"
+            bold: True
+            markup: True # serve para alterar a cor de uma parte do texto
+
+        TextInput:
+            id: email
+            hint_text: "E-mail"
+            pos_hint: {"right": 0.9, "top": 0.7}
+            size_hint: 0.8, 0.1
+
+        TextInput:
+            id: senha
+            hint_text: "Senha"
+            pos_hint: {"right": 0.9, "top": 0.55}
+            size_hint: 0.8, 0.1
+
+
+        Label:
+            text: "[color=#00CFDB]Faça seu login[/color]"
+            bold: True
+            markup: True
+            pos_hint: {"right": 0.9, "top": 0.4}
+            size_hint: 0.8, 0.1
+
+        LabelButton:
+            # o .before só é necessário caso a imagem tampe o texto!!
+            canvas.before:
+                Rectangle:
+                    size: self.size
+                    pos: self.pos # quando o botão é apertado a imagem é alterada. 
+                    source: "icones/botao.png" if self.state == "normal" else "icones/botao_apertado.png"
+
+            on_release:print("Faça login")
+            text: "Faça seu login"
+            pos_hint: {"right": 0.45, "top": 0.3}
+            size_hint: 0.4, 0.2
+
+        LabelButton:
+            # o .before só é necessário caso a imagem tampe o texto!!
+            canvas.before:
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+                    source: "icones/botao.png" if self.state == "normal" else "icones/botao_apertado.png"
+
+            on_release: print("Criar conta")
+            text: "Criar Conta"
+            pos_hint: {"right": 0.95, "top": 0.3}
+            size_hint: 0.4, 0.2

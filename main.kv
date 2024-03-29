@@ -6,6 +6,7 @@
 #:include kv/fotoperfilpage.kv
 #:include kv/listarvendedorespage.kv
 #:include kv/todasvendaspage.kv
+#:include kv/loginpage.kv
 
 # lib do kivy para alterarmos a cor de fundo do bg
 #:import utils kivy.utils
@@ -37,6 +38,11 @@ FloatLayout:
         id: screen_manager  
 
         # Classes das telas  que foram criadas no arquivo telas.py
+        # OBS: a ordem das telas importa
+        LoginPage:
+            name: "loginpage"
+            id: loginpage
+
         # OBS: a minha tela principal tem que vir antes das outras, nesse caso a HomePage
         HomePage:
             name: "homepage"
@@ -65,3 +71,7 @@ FloatLayout:
         TodasVendasPage:
             name: "todasvendaspage"
             id: todasvendaspage
+
+        LoginPage:
+            name: "loginpage"
+            id: loginpage
