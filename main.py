@@ -11,6 +11,7 @@ import os
 # o partial permite passar um parâmetro para uma função que está sendo passado  como parametro de um botão
 from functools import partial
 
+from myfirebase import MyFireBase
 from telas import *
 from botoes import *
 from bannervenda import *
@@ -26,6 +27,10 @@ class MainApp(App):
     id_usuario = 1
 
     def build(self):
+
+        # Estamos usando as funções da classe MyFireBase no loginpage.kv
+        self.firebase = MyFireBase()
+
         return GUI
 
     # Essa função é executada na inicialização do aplicativo
@@ -39,7 +44,7 @@ class MainApp(App):
 
         for foto in arquivos: # o partial permite passar um parâmetro para uma função que está sendo passado  como parametro de um botão
             imagem = ImageButton(source = f'icones/fotos_perfil/{foto}', on_release = partial( self.mudar_foto_perfil, foto))
-            
+
             lista_fotos.add_widget(imagem)
 
 
