@@ -53,6 +53,7 @@ class MainApp(App):
 
     def carregar_infos_usuario(self):
         try:
+            # Se o usuário ja tiver logado antes nós vamos pegar o seu refresh_token no arquivo de texto e vamos logalo  automaticamente assim também como vamos carregar as suas informações
             with open("refresh.txt", "r") as arquivo:
                 refresh_token = arquivo.read()
             local_id, id_token = self.firebase.trocar_token(refresh_token)
@@ -71,6 +72,7 @@ class MainApp(App):
             # alterando o source com a nova foto de perfil que veio da requisição
             foto_perfil.source = f"icones/fotos_perfil/{avatar}"
 
+            # Carregando as informações de vendas do usuário
             try: # preencher lista de vendas
                 vendas = requisicao_dic['vendas'][1:] # retorna uma lista de dicionario que contém a informação das vendas de cada cliente
                 # Recuperando todos os ids da pagina homepage
@@ -89,6 +91,7 @@ class MainApp(App):
 
             except Exception as e:
                 print(f'Erro: {e}')
+            # Fim do Carregando as informações de vendas do usuário
 
             self.mudarTela("homepage")
 

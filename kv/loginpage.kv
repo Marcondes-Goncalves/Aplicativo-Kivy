@@ -43,7 +43,7 @@
                     pos: self.pos # quando o botão é apertado a imagem é alterada. 
                     source: "icones/botao.png" if self.state == "normal" else "icones/botao_apertado.png"
 
-            on_release:print("Faça login")
+            on_release: app.firebase.fazer_login(email_input.text, senha_input.text)
             text: "Faça seu login"
             pos_hint: {"right": 0.45, "top": 0.3}
             size_hint: 0.4, 0.2
