@@ -66,6 +66,7 @@ class MainApp(App):
 
             # pegando o avatar da requisição por meio da chave do dicionario ['avatar']
             avatar = requisicao_dic['avatar']
+            self.avatar = avatar
             # selecionando o id foto_perfil do meu arquivo main.kv
             foto_perfil = self.root.ids["foto_perfil"] # type: ignore[Unknown]
             # alterando o source com a nova foto de perfil que veio da requisição
@@ -73,17 +74,23 @@ class MainApp(App):
 
             # Preencher o ID único 
             id_vendedor = requisicao_dic["id_vendedor"]
+            self.id_vendedor = id_vendedor
             pagina_ajustes = self.root.ids["ajustespage"] # type: ignore[Unknown]
             pagina_ajustes.ids["idVendedor"].text=f'Seu ID Único: {id_vendedor}'
 
             # Preencher total de vendas
             total_vendas = requisicao_dic["total_vendas"]
+            self.total_vendas = total_vendas
             home_page = self.root.ids["homepage"] # type: ignore[Unknown]
             home_page.ids["label_total_vendas"].text=f'[color=#000000]Total de Vendas:[/color] [b]R${total_vendas}[/b]'
+
+            # Preencher equipe
+            self.equipe = requisicao_dic["equipe"]
             
             # Carregando as informações de vendas do usuário
             try: # preencher lista de vendas
                 vendas = requisicao_dic['vendas'][1:] # retorna uma lista de dicionario que contém a informação das vendas de cada cliente
+                self.vendas = vendas
                 # Recuperando todos os ids da pagina homepage
                 pagina_homepage = self.root.ids['homepage'] # type: ignore[Unknown]
                 # Selecionando apenas o id lista_vendas
@@ -119,6 +126,34 @@ class MainApp(App):
         except Exception as a:
             print(a)
 
+    def adicionar_vendedor(self, id_vendedor_adicionado):
+
+        link = f'https://aplicativovendashash-b0c09-default-rtdb.firebaseio.com/.json?orderBy="id_vendedor"&equalTo="{id_vendedor_adicionado}"'
+        
+        requisicao = requests.get(link)
+        requisicao_dict = requisicao.json()
+
+        pagina_adicionarvendedor = self.root.ids["adicionarvendedorpage"] # type: ignore[Unknown]
+        mensagem_texto = pagina_adicionarvendedor.ids["mensagem_outrovendedor"]
+       
+        if requisicao_dict == {}:
+            mensagem_texto.text = "Usuário não encontrado"
+        else:
+            equipe = self.equipe.split(",")
+            if id_vendedor_adicionado in equipe:
+                mensagem_texto.text = "Vendedor já faz parte da equipe"
+            else:
+                self.equipe = self.equipe + f",{id_vendedor_adicionado}"
+                info = f'{{"equipe": "{self.equipe}"}}'
+                requisicao = requests.patch(f"https://aplicativovendashash-b0c09-default-rtdb.firebaseio.com/{self.local_id}.json", data = info)
+
+                mensagem_texto.text = "Vendedor adicionado com sucesso"
+                # Adiciona um novo Banner a nossa lista de vendedores
+                pagina_lista_vendedores = self.root.ids["listarvendedorespage"] # type: ignore[Unknown]
+                lista_vendedores = pagina_lista_vendedores.ids["lista_vendedores"]
+
+                banner_vendedor = BannerVendedor(id_vendedor = id_vendedor_adicionado)
+                lista_vendedores.add_widget(banner_vendedor)
 
     # o Pylance não está reconhecendo o parâmetro ids, mas está funcionando.
     def mudarTela(self, idTela: str):

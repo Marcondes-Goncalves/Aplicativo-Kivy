@@ -30,7 +30,7 @@ class BannerVendedor(FloatLayout):
         valor = list(requisicao_dict.values())[0]
         avatar = valor["avatar"]
         total_vendas =valor["total_vendas"]
-        print(valor)
+        #print(valor)
 
         imagem = ImageButton(source = f"icones/fotos_perfil/{avatar}", pos_hint={'right': 0.4, 'top': 0.9}, size_hint=(0.3, 0.8))
         label_id = LabelButton(text = f"ID vendedor: {id_vendedor}", pos_hint={'right': 0.9, 'top': 0.9}, size_hint=(0.5, 0.5))
