@@ -40,10 +40,29 @@ class MainApp(App):
         arquivos = os.listdir("icones/fotos_perfil")
         pagina_fotoperfil = self.root.ids['fotoperfilpage'] # type: ignore[Unknown]
         lista_fotos = pagina_fotoperfil.ids['lista_fotos_perfil']
-
         for foto in arquivos: # o partial permite passar um parâmetro para uma função que está sendo passado  como parametro de um botão
             imagem = ImageButton(source = f'icones/fotos_perfil/{foto}', on_release = partial( self.mudar_foto_perfil, foto))
             lista_fotos.add_widget(imagem)
+
+        # carregar as fotos dos clientes
+        arquivos = os.listdir("icones/fotos_clientes")
+        pagina_adicionarvendas = self.root.ids["adicionarvendaspage"] # type: ignore[Unknown]
+        lista_clientes = pagina_adicionarvendas.ids["lista_clientes"]
+        for fotoCliente in arquivos:
+            imagem = ImageButton(source = f"icones/fotos_clientes/{fotoCliente}")
+            label = LabelButton(text = fotoCliente.replace(".png", "").capitalize())
+            lista_clientes.add_widget(imagem)
+            lista_clientes.add_widget(label)
+
+        # carregar as fotos dos produtos
+        arquivos = os.listdir("icones/fotos_produtos")
+        pagina_adicionarvendas = self.root.ids["adicionarvendaspage"] # type: ignore[Unknown]
+        lista_produtos = pagina_adicionarvendas.ids["lista_produtos"]
+        for fotoProduto in arquivos:
+            imagem = ImageButton(source = f"icones/fotos_produtos/{fotoProduto}")
+            label = LabelButton(text = fotoProduto.replace(".png", "").capitalize())
+            lista_produtos.add_widget(imagem)
+            lista_produtos.add_widget(label)
 
 
         #carrega as infos do usuário
