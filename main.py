@@ -36,15 +36,14 @@ class MainApp(App):
     # Essa função é executada na inicialização do aplicativo
     def on_start(self):
 
-        # carregar as fotos de perfil
+        # carregar as fotos de perfil e também a altera se o usuário clicar em uma
         arquivos = os.listdir("icones/fotos_perfil")
 
         pagina_fotoperfil = self.root.ids['fotoperfilpage'] # type: ignore[Unknown]
         lista_fotos = pagina_fotoperfil.ids['lista_fotos_perfil']
-
+        
         for foto in arquivos: # o partial permite passar um parâmetro para uma função que está sendo passado  como parametro de um botão
             imagem = ImageButton(source = f'icones/fotos_perfil/{foto}', on_release = partial( self.mudar_foto_perfil, foto))
-
             lista_fotos.add_widget(imagem)
 
 
@@ -54,6 +53,12 @@ class MainApp(App):
 
     def carregar_infos_usuario(self):
         try:
+            with open("refresh.txt", "r") as arquivo:
+                refresh_token = arquivo.read()
+            local_id, id_token = self.firebase.trocar_token(refresh_token)
+            self.local_id = local_id
+            self.id_token = id_token
+
             # as nossas requisições tem que terminar com .json no final do link para podermos manipular com python
             requisicao = requests.get(f"https://aplicativovendashash-b0c09-default-rtdb.firebaseio.com/{self.local_id}.json") # pegando as informaçõs do usuário
             # pegando o json e transformando em um dicionario
@@ -85,13 +90,19 @@ class MainApp(App):
             except Exception as e:
                 print(f'Erro: {e}')
 
+            self.mudarTela("homepage")
+
         except Exception as a:
             print(a)
 
 
     # o Pylance não está reconhecendo o parâmetro ids, mas está funcionando.
     def mudarTela(self, idTela: str):
-        # Essa função recebe o id da tela para mudar de tela.
+        """ Função para mudar de tela.
+
+        gerenciadorTelas: self.root.ids["screen_manager"]
+            gerenciadorTelas.current: idTela
+        """
         # Por meio do ScreenManager que foi definido no arquivo main.kv, podemos alternar entre telas.
         # self.root é o arquivo que carregamos na nossa GUI ou seja o main.kv
         gerenciadorTelas = self.root.ids["screen_manager"] # type: ignore[Unknown]
@@ -99,6 +110,14 @@ class MainApp(App):
 
 
     def mudar_foto_perfil(self, foto, *args):
+        """Função para mudar a foto de perfil do usuário
+
+        foto:
+            str: nome da foto
+
+        *args:
+            argumento padrão.
+        """
         # selecionando o id foto_perfil do meu arquivo main.kv
         foto_perfil = self.root.ids["foto_perfil"] # type: ignore[Unknown]
         # alterando o source com a nova foto de perfil que veio da requisição
@@ -108,8 +127,7 @@ class MainApp(App):
         # OBS: o dado que será passado para o banco tem que ser convertido no padrão abaixo
         info = f'{{"avatar": "{foto}"}}'
 
-        requests.patch(f'https://aplicativovendashash-b0c09-default-rtdb.firebaseio.com/{self.local_id}.json', 
-                                    data = info)
+        requests.patch(f'https://aplicativovendashash-b0c09-default-rtdb.firebaseio.com/{self.local_id}.json', data = info)
         
         self.mudarTela('ajustespage')
 

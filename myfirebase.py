@@ -5,6 +5,8 @@ from kivy.app import App
 import requests
 
 class MyFireBase():
+    """Classe para gerênciar o login e criar uma nova conta do usuário
+    """
     
     API_KEY: str = "AIzaSyATe004SXsbO8gXFLbWbaxQnv_E1207JbQ"
 
@@ -64,3 +66,30 @@ class MyFireBase():
 
     def fazer_login(self, email, senha):
         ...
+
+    def trocar_token(self, refresh_token):
+        """Função para logar o usuário automáticamente se o mesmo ja tiver criado uma conta
+
+        Args:
+            refresh_token (_type_): _description_
+
+        Returns:
+            tupla: (local_id, id_token)
+        """
+
+        link = f"https://securetoken.googleapis.com/v1/token?key={self.API_KEY}"
+
+        info = {"grant_type": "refresh_token", "refresh_token": refresh_token}
+
+        requisicao = requests.post(link, data = info)
+
+        requisicao_dic = requisicao.json()
+
+        local_id = requisicao_dic["user_id"]
+        id_token = requisicao_dic["id_token"]
+
+        #print(requisicao_dic)
+        
+        return (local_id, id_token)
+    
+    
