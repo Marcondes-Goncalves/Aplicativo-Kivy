@@ -70,6 +70,16 @@ class MainApp(App):
             # alterando o source com a nova foto de perfil que veio da requisição
             foto_perfil.source = f"icones/fotos_perfil/{avatar}"
 
+            # Preencher o ID único 
+            id_vendedor = requisicao_dic["id_vendedor"]
+            pagina_ajustes = self.root.ids["ajustespage"] # type: ignore[Unknown]
+            pagina_ajustes.ids["idVendedor"].text=f'Seu ID Único: {id_vendedor}'
+
+            # Preencher total de vendas
+            total_vendas = requisicao_dic["total_vendas"]
+            home_page = self.root.ids["homepage"] # type: ignore[Unknown]
+            home_page.ids["label_total_vendas"].text=f'[color=#000000]Total de Vendas:[/color] [b]R${total_vendas}[/b]'
+            
             # Carregando as informações de vendas do usuário
             try: # preencher lista de vendas
                 vendas = requisicao_dic['vendas'][1:] # retorna uma lista de dicionario que contém a informação das vendas de cada cliente
