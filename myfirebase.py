@@ -36,6 +36,14 @@ class MyFireBase():
             with open("refresh.txt", "w") as arquivo:
                 arquivo.write(refresh_token)
 
+            link = f"https://aplicativovendashash-b0c09-default-rtdb.firebaseio.com/{local_id}.json"
+
+            info_usuario = '{"avatar": "foto1.png", "equipe": "", "total_vendas": "0", "vendas": ""}'
+
+            requisicao_usuario = requests.patch(link, data = info_usuario)
+
+            meu_aplicativo.mudarTela("homepage") # type: ignore[Unknown]
+
         else:
             # Pegando o erro e mensagem de erro da minha requisição
             mensagem_erro = requisicao_dic["error"]["message"]
