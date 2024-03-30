@@ -12,6 +12,7 @@ import os
 # o partial permite passar um parâmetro para uma função que está sendo passado  como parametro de um botão
 from functools import partial
 
+from BannerVendedor import BannerVendedor
 from myfirebase import MyFireBase
 from telas import *
 from botoes import *
@@ -100,6 +101,18 @@ class MainApp(App):
             except Exception as e:
                 print(f'Erro: {e}')
             # Fim do Carregando as informações de vendas do usuário
+            
+            # Preencher equipe de vendedores
+            equipe = requisicao_dic["equipe"]
+            lista_equipe: list = equipe.split(",")
+            pagina_lista_vendedores = self.root.ids["listarvendedorespage"] # type: ignore[Unknown]
+            lista_vendedores = pagina_lista_vendedores.ids["lista_vendedores"]
+
+            for id_vendedor_equipe in lista_equipe:
+                if id_vendedor_equipe != "":
+                    banner_vendedor = BannerVendedor(id_vendedor = id_vendedor_equipe)
+                    lista_vendedores.add_widget(banner_vendedor)
+                    # Fim Preencher equipe de vendedores
 
             self.mudarTela("homepage")
 
