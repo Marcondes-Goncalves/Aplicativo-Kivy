@@ -42,6 +42,8 @@ class MyFireBase():
 
             requisicao_usuario = requests.patch(link, data = info_usuario)
 
+            meu_aplicativo.carregar_infos_usuario() # type: ignore[Unknown]
+
             meu_aplicativo.mudarTela("homepage") # type: ignore[Unknown]
 
         else:
