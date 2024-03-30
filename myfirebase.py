@@ -1,4 +1,5 @@
 
+from importlib.machinery import PathFinder
 from kivy.app import App
 
 import requests
@@ -21,6 +22,20 @@ class MyFireBase():
 
         if requisicao.ok:
             print("Usuário criado")
+
+            refresh_token = requisicao_dic['refreshToken'] # -> token mantém o usuário logado
+            local_id = requisicao_dic['localId'] # -> id do usuário
+            id_token = requisicao_dic['idToken'] # -> autenticação
+
+            # Pegando a instância do meu aplicativo em execução
+            meu_aplicativo = App.get_running_app()
+            meu_aplicativo.local_id = local_id # type: ignore[Unknown]
+            meu_aplicativo.id_token = id_token # type: ignore[Unknown]
+
+            # Salvando o token do usuário em um arquivo txt, para que da próxima vez que ele entrar no aplicativo, o mesmo não precise logar novamente.
+            with open("refresh.txt", "w") as arquivo:
+                arquivo.write(refresh_token)
+
         else:
             # Pegando o erro e mensagem de erro da minha requisição
             mensagem_erro = requisicao_dic["error"]["message"]
