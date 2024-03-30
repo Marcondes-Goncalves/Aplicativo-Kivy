@@ -30,7 +30,6 @@ class MainApp(App):
 
         # Estamos usando as funções da classe MyFireBase no loginpage.kv
         self.firebase = MyFireBase()
-
         return GUI
 
     # Essa função é executada na inicialização do aplicativo
@@ -38,10 +37,9 @@ class MainApp(App):
 
         # carregar as fotos de perfil e também a altera se o usuário clicar em uma
         arquivos = os.listdir("icones/fotos_perfil")
-
         pagina_fotoperfil = self.root.ids['fotoperfilpage'] # type: ignore[Unknown]
         lista_fotos = pagina_fotoperfil.ids['lista_fotos_perfil']
-        
+
         for foto in arquivos: # o partial permite passar um parâmetro para uma função que está sendo passado  como parametro de um botão
             imagem = ImageButton(source = f'icones/fotos_perfil/{foto}', on_release = partial( self.mudar_foto_perfil, foto))
             lista_fotos.add_widget(imagem)
