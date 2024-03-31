@@ -1,4 +1,5 @@
 
+from lib2to3.pytree import type_repr
 from shutil import ExecError
 from sys import exception
 from kivy.app import App
@@ -27,6 +28,10 @@ GUI = Builder.load_file("main.kv")
 class MainApp(App):
     """Classe padrão para criar um App
     """
+
+    cliente = None
+    produto = None
+    unidade = None
 
     def build(self):
 
@@ -153,6 +158,7 @@ class MainApp(App):
         except Exception as a:
             print(a)
 
+
     def adicionar_vendedor(self, id_vendedor_adicionado):
 
         link = f'https://aplicativovendashash-b0c09-default-rtdb.firebaseio.com/.json?orderBy="id_vendedor"&equalTo="{id_vendedor_adicionado}"'
@@ -181,6 +187,7 @@ class MainApp(App):
 
                 banner_vendedor = BannerVendedor(id_vendedor = id_vendedor_adicionado)
                 lista_vendedores.add_widget(banner_vendedor)
+
 
     # o Pylance não está reconhecendo o parâmetro ids, mas está funcionando.
     def mudarTela(self, idTela: str):
@@ -219,6 +226,9 @@ class MainApp(App):
 
 
     def selecionar_cliente(self, foto, *args):
+
+        self.cliente = foto.replace(".png", "")
+
         # pintar de azul o nome do item seelcionado
         pagina_adicionarvendas = self.root.ids["adicionarvendaspage"] # type: ignore[Unknown]
         lista_clientes = pagina_adicionarvendas.ids["lista_clientes"]
@@ -235,7 +245,11 @@ class MainApp(App):
             except:
                 pass
 
+
     def selecionar_produto(self, foto, *args):
+
+        self.produto = foto.replace(".png", "")
+
         # pintar de azul o nome do item seelcionado
         pagina_adicionarvendas = self.root.ids["adicionarvendaspage"] # type: ignore[Unknown]
         lista_produtos = pagina_adicionarvendas.ids["lista_produtos"]
@@ -252,8 +266,11 @@ class MainApp(App):
             except:
                 pass
 
+
     def selecionar_unidadade(self, id_label, *args):
         pagina_adicionarvendas = self.root.ids["adicionarvendaspage"] # type: ignore[Unknown]
+
+        self.unidade = id_label.replace("unidades_", "")
 
         #pintar todos de branco
         pagina_adicionarvendas.ids["unidades_kg"].color = (1,1,1,1)
@@ -263,6 +280,82 @@ class MainApp(App):
         #pintar o selecionado de azul
         pagina_adicionarvendas.ids[id_label].color = (0, 207/255, 219/255,1)
 
+
+    def adicionar_venda(self):
+        cliente = self.cliente
+        produto = self.produto
+        unidade = self.unidade
+
+        pagina_adicionarvendas = self.root.ids["adicionarvendaspage"] # type: ignore[Unknown]
+        data = pagina_adicionarvendas.ids["label_data"].text.replace("Data: ", "")
+
+        preco = pagina_adicionarvendas.ids["preco_total"].text
+        quantidade = pagina_adicionarvendas.ids["quantidade"].text
+
+        # Se esses campos não forem selecionados os mesmo serão pintados de vermelho!
+        if not cliente:
+            pagina_adicionarvendas.ids["label_selecione_cliente"].color = (1,0,0,1)
+
+        if not produto:
+            pagina_adicionarvendas.ids["label_selecione_produto"].color = (1,0,0,1)
+
+        if not unidade:
+            pagina_adicionarvendas.ids["unidades_kg"].color = (1,0,0,1)
+            pagina_adicionarvendas.ids["unidades_unidades"].color = (1,0,0,1)
+            pagina_adicionarvendas.ids["unidades_litros"].color = (1,0,0,1)
+            
+        if not preco:
+            pagina_adicionarvendas.ids["label_preco"].color = (1,0,0,1)
+        else:
+            try:
+                preco = float(preco)
+            except:
+                pagina_adicionarvendas.ids["label_preco"].color = (1,0,0,1)
+
+        if not quantidade:
+            pagina_adicionarvendas.ids["label_quantidade"].color = (1,0,0,1)
+        else:
+            try:
+                quantidade = float(quantidade)
+            except:
+                pagina_adicionarvendas.ids["label_quantidade"].color = (1,0,0,1)
+
+        # Se ele preencheu tudo vamos enviar os dados
+        if cliente and produto and unidade and preco and quantidade and type(preco) == float and type(quantidade) == float:
+            foto_produto = produto + ".png"
+            foto_cliente = cliente + ".png" 
+
+            info = f'{{"cliente": "{cliente}", "produto": "{produto}", "foto_cliente": "{foto_cliente}", "foto_produto": "{foto_produto}", "data": "{data}", "unidade": "{unidade}", "preco": "{preco}", "quantidade": "{quantidade}"}}'
+
+            requests.post(f"https://aplicativovendashash-b0c09-default-rtdb.firebaseio.com/{self.local_id}/vendas.json", data = info)
+
+            banner = BannerVenda(cliente = cliente, produto = produto, foto_cliente = foto_cliente, foto_produto = foto_produto, data = data, unidade = unidade, preco = preco, quantidade = quantidade)
+
+            # Recuperando todos os ids da pagina homepage
+            pagina_homepage = self.root.ids['homepage'] # type: ignore[Unknown]
+            # Selecionando apenas o id lista_vendas
+            lista_vendas = pagina_homepage.ids['lista_vendas']
+            lista_vendas.add_widget(banner)
+
+            # pegando o total de vendas e atualizando o seu valor
+            requisicao = requests.get(f"https://aplicativovendashash-b0c09-default-rtdb.firebaseio.com/{self.local_id}/total_vendas.json")
+            total_vendas = float(requisicao.json())
+            total_vendas += preco
+
+            # atualizando o total de vendas no banco
+            info = f'{{"total_vendas": "{total_vendas}"}}'
+            requests.patch(f"https://aplicativovendashash-b0c09-default-rtdb.firebaseio.com/{self.local_id}.json", data = info)
+
+            # atualizando o total de vendas na home page
+            home_page = self.root.ids["homepage"] # type: ignore[Unknown]
+            home_page.ids["label_total_vendas"].text=f'[color=#000000]Total de Vendas:[/color] [b]R${total_vendas}[/b]'
+
+            self.mudarTela("homepage")
+
+        self.cliente = None
+        self.produto = None
+        self.unidade = None
+        
 
 MainApp().run()
 
