@@ -361,5 +361,58 @@ class MainApp(App):
         self.unidade = None
         
 
+    def carregar_todas_vendas(self):
+        #Preencher a página todasvendaspage
+        # as nossas requisições tem que terminar com .json no final do link para podermos manipular com python
+        # pegando as informaçõs da empresa
+        requisicao = requests.get(f'https://aplicativovendashash-b0c09-default-rtdb.firebaseio.com/.json?orderBy="id_vendedor"') 
+        # pegando o json e transformando em um dicionario
+        requisicao_dic:dict = requisicao.json()
+        #print(requisicao_dic)
+
+        # selecionando o id foto_perfil do meu arquivo main.kv
+        foto_perfil = self.root.ids["foto_perfil"] # type: ignore[Unknown]
+        # alterando o source com a nova foto de perfil que veio da requisição
+        foto_perfil.source = f"icones/fotos_perfil/hash.png"
+
+        pagina_todasvendaspage = self.root.ids["todasvendaspage"] # type: ignore[Unknown]
+        lista_todas_vendas = pagina_todasvendaspage.ids["lista_vendas"]
+        total_vendas: float = 0
+
+        for local_id_usuario in requisicao_dic:
+            try:
+                vendas = requisicao_dic[local_id_usuario]["vendas"]
+
+                for id_venda in vendas:
+                    venda = vendas[id_venda]
+
+                    total_vendas += float(venda["preco"])
+
+                    banner = BannerVenda(cliente = venda['cliente'], foto_cliente = venda['foto_cliente'], produto = venda['produto'],
+                            foto_produto = venda['foto_produto'], data = venda['data'], preco = venda['preco'], unidade = venda['unidade'],
+                            quantidade = venda['quantidade'])
+                    
+                    lista_todas_vendas.add_widget(banner)
+                    
+            except :
+                pass
+            
+        # Preencher total de vendas
+        pagina_todasvendaspage.ids["label_total_vendas"].text=f'[color=#000000]Total de Vendas:[/color] [b]R${total_vendas}[/b]'
+
+        # Redirecionar para a página todasvendaspage
+        self.mudarTela("todasvendaspage")
+
+
+    def sair_todas_vendas(self):
+        # selecionando o id foto_perfil do meu arquivo main.kv
+        foto_perfil = self.root.ids["foto_perfil"] # type: ignore[Unknown]
+        
+        # alterando o source com a nova foto de perfil que veio da requisição
+        foto_perfil.source = f"icones/fotos_perfil/{self.avatar}"
+
+        self.mudarTela("ajustespage")
+
+
 MainApp().run()
 
