@@ -362,6 +362,14 @@ class MainApp(App):
         
 
     def carregar_todas_vendas(self):
+        pagina_todasvendaspage = self.root.ids["todasvendaspage"] # type: ignore[Unknown]
+        lista_todas_vendas = pagina_todasvendaspage.ids["lista_vendas"]
+
+        for item in list(lista_todas_vendas.children):
+            lista_todas_vendas.remove_widget(item)
+
+
+
         #Preencher a página todasvendaspage
         # as nossas requisições tem que terminar com .json no final do link para podermos manipular com python
         # pegando as informaçõs da empresa
@@ -375,8 +383,6 @@ class MainApp(App):
         # alterando o source com a nova foto de perfil que veio da requisição
         foto_perfil.source = f"icones/fotos_perfil/hash.png"
 
-        pagina_todasvendaspage = self.root.ids["todasvendaspage"] # type: ignore[Unknown]
-        lista_todas_vendas = pagina_todasvendaspage.ids["lista_vendas"]
         total_vendas: float = 0
 
         for local_id_usuario in requisicao_dic:
