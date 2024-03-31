@@ -127,7 +127,7 @@ class MyFireBase():
 
         info = {"grant_type": "refresh_token", "refresh_token": refresh_token}
 
-        requisicao = requests.post(link, data = info)
+        requisicao = requests.post(link, data = info) 
 
         requisicao_dic = requisicao.json()
 

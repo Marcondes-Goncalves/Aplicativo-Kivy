@@ -420,5 +420,38 @@ class MainApp(App):
         self.mudarTela("ajustespage")
 
 
+    def carregar_vendas_vendedor(self, dic_info_vendedor, *args):
+
+        try:
+            vendas = dic_info_vendedor["vendas"]
+
+            pagina_vendasoutrovendedor = self.root.ids["vendasoutrovendedorpage"] # type: ignore[Unknown]
+            lista_vendas = pagina_vendasoutrovendedor.ids["lista_vendas"]
+
+            for id_venda in vendas:
+                venda = vendas[id_venda]
+
+                banner = BannerVenda(cliente = venda['cliente'], foto_cliente = venda['foto_cliente'], produto = venda['produto'],
+                        foto_produto = venda['foto_produto'], data = venda['data'], preco = venda['preco'], unidade = venda['unidade'],
+                        quantidade = venda['quantidade'])
+                    
+                lista_vendas.add_widget(banner)
+                    
+        except :
+            pass
+
+        total_vendas = dic_info_vendedor["total_vendas"]
+        # Preencher total de vendas
+        pagina_vendasoutrovendedor.ids["label_total_vendas"].text=f'[color=#000000]Total de Vendas:[/color] [b]R${total_vendas}[/b]' # type: ignore[Unknown]
+
+        # selecionando o id foto_perfil do meu arquivo main.kv
+        foto_perfil = self.root.ids["foto_perfil"] # type: ignore[Unknown]
+        # alterando o source com a nova foto de perfil que veio da requisição
+        avatar = dic_info_vendedor['avatar']
+        foto_perfil.source = f"icones/fotos_perfil/{avatar}"
+
+        self.mudarTela("vendasoutrovendedorpage")
+
+
 MainApp().run()
 
