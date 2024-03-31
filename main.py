@@ -422,14 +422,15 @@ class MainApp(App):
 
     def carregar_vendas_vendedor(self, dic_info_vendedor, *args):
 
-        pagina_vendasoutrovendedor = self.root.ids["vendasoutrovendedorpage"] # type: ignore[Unknown]
-        lista_vendas = pagina_vendasoutrovendedor.ids["lista_vendas"]
-
-        for item in list(lista_vendas.children):
-            lista_vendas.remove_widget(item)
-
         try:
             vendas = dic_info_vendedor["vendas"]
+
+            pagina_vendasoutrovendedor = self.root.ids["vendasoutrovendedorpage"] # type: ignore[Unknown]
+            lista_vendas = pagina_vendasoutrovendedor.ids["lista_vendas"]
+
+            # limpando as vendas para garantir que não tenha vendas duplicadas
+            for item in list(lista_vendas.children):
+                lista_vendas.remove_widget(item)
 
             for id_venda in vendas:
                 venda = vendas[id_venda]
@@ -439,7 +440,6 @@ class MainApp(App):
                         quantidade = venda['quantidade'])
                     
                 lista_vendas.add_widget(banner)
-                    
         except :
             pass
 
