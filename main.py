@@ -410,23 +410,26 @@ class MainApp(App):
         self.mudarTela("todasvendaspage")
 
 
-    def sair_todas_vendas(self):
+    def sair_todas_vendas(self, id_tela):
         # selecionando o id foto_perfil do meu arquivo main.kv
         foto_perfil = self.root.ids["foto_perfil"] # type: ignore[Unknown]
         
         # alterando o source com a nova foto de perfil que veio da requisição
         foto_perfil.source = f"icones/fotos_perfil/{self.avatar}"
 
-        self.mudarTela("ajustespage")
+        self.mudarTela(id_tela)
 
 
     def carregar_vendas_vendedor(self, dic_info_vendedor, *args):
 
+        pagina_vendasoutrovendedor = self.root.ids["vendasoutrovendedorpage"] # type: ignore[Unknown]
+        lista_vendas = pagina_vendasoutrovendedor.ids["lista_vendas"]
+
+        for item in list(lista_vendas.children):
+            lista_vendas.remove_widget(item)
+
         try:
             vendas = dic_info_vendedor["vendas"]
-
-            pagina_vendasoutrovendedor = self.root.ids["vendasoutrovendedorpage"] # type: ignore[Unknown]
-            lista_vendas = pagina_vendasoutrovendedor.ids["lista_vendas"]
 
             for id_venda in vendas:
                 venda = vendas[id_venda]
