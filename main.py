@@ -8,6 +8,7 @@ from kivy.lang import Builder
 import requests
 
 import os
+from datetime import date
 
 # o partial permite passar um parâmetro para uma função que está sendo passado  como parametro de um botão
 from functools import partial
@@ -44,26 +45,33 @@ class MainApp(App):
             imagem = ImageButton(source = f'icones/fotos_perfil/{foto}', on_release = partial( self.mudar_foto_perfil, foto))
             lista_fotos.add_widget(imagem)
 
+
         # carregar as fotos dos clientes
         arquivos = os.listdir("icones/fotos_clientes")
         pagina_adicionarvendas = self.root.ids["adicionarvendaspage"] # type: ignore[Unknown]
         lista_clientes = pagina_adicionarvendas.ids["lista_clientes"]
         for fotoCliente in arquivos:
-            imagem = ImageButton(source = f"icones/fotos_clientes/{fotoCliente}")
-            label = LabelButton(text = fotoCliente.replace(".png", "").capitalize())
+            imagem = ImageButton(source = f"icones/fotos_clientes/{fotoCliente}", on_release = partial(self.selecionar_cliente, fotoCliente))
+            label = LabelButton(text = fotoCliente.replace(".png", "").capitalize(), on_release = partial(self.selecionar_cliente, fotoCliente))
             lista_clientes.add_widget(imagem)
             lista_clientes.add_widget(label)
+
 
         # carregar as fotos dos produtos
         arquivos = os.listdir("icones/fotos_produtos")
         pagina_adicionarvendas = self.root.ids["adicionarvendaspage"] # type: ignore[Unknown]
         lista_produtos = pagina_adicionarvendas.ids["lista_produtos"]
         for fotoProduto in arquivos:
-            imagem = ImageButton(source = f"icones/fotos_produtos/{fotoProduto}")
-            label = LabelButton(text = fotoProduto.replace(".png", "").capitalize())
+            imagem = ImageButton(source = f"icones/fotos_produtos/{fotoProduto}", on_release = partial(self.selecionar_produto, fotoProduto))
+            label = LabelButton(text = fotoProduto.replace(".png", "").capitalize(), on_release = partial(self.selecionar_produto, fotoProduto))
             lista_produtos.add_widget(imagem)
             lista_produtos.add_widget(label)
 
+
+        #  carregar a data
+        pagina_adicionarvendas = self.root.ids["adicionarvendaspage"] # type: ignore[Unknown]
+        label_data = pagina_adicionarvendas.ids["label_data"]
+        label_data.text = f"Data: {date.today().strftime('%d/%m/%Y')}"
 
         #carrega as infos do usuário
         self.carregar_infos_usuario()
@@ -208,6 +216,52 @@ class MainApp(App):
         requests.patch(f'https://aplicativovendashash-b0c09-default-rtdb.firebaseio.com/{self.local_id}.json', data = info)
         
         self.mudarTela('ajustespage')
+
+
+    def selecionar_cliente(self, foto, *args):
+        # pintar de azul o nome do item seelcionado
+        pagina_adicionarvendas = self.root.ids["adicionarvendaspage"] # type: ignore[Unknown]
+        lista_clientes = pagina_adicionarvendas.ids["lista_clientes"]
+
+        # pintando os textos que não estão selecionados de branco 
+        for item in list(lista_clientes.children):
+            item.color = (1,1,1,1)
+            # pintar de azul o item selecionado
+            try:
+                texto = item.text
+                texto = texto.lower() + ".png"
+                if foto == texto:
+                    item.color = (0, 207/255, 219/255,1)
+            except:
+                pass
+
+    def selecionar_produto(self, foto, *args):
+        # pintar de azul o nome do item seelcionado
+        pagina_adicionarvendas = self.root.ids["adicionarvendaspage"] # type: ignore[Unknown]
+        lista_produtos = pagina_adicionarvendas.ids["lista_produtos"]
+
+        # pintando os textos que não estão selecionados de branco 
+        for item in list(lista_produtos.children):
+            item.color = (1,1,1,1)
+            # pintar de azul o item selecionado
+            try:
+                texto = item.text
+                texto = texto.lower() + ".png"
+                if foto == texto:
+                    item.color = (0, 207/255, 219/255,1)
+            except:
+                pass
+
+    def selecionar_unidadade(self, id_label, *args):
+        pagina_adicionarvendas = self.root.ids["adicionarvendaspage"] # type: ignore[Unknown]
+
+        #pintar todos de branco
+        pagina_adicionarvendas.ids["unidades_kg"].color = (1,1,1,1)
+        pagina_adicionarvendas.ids["unidades_unidades"].color = (1,1,1,1)
+        pagina_adicionarvendas.ids["unidades_litros"].color = (1,1,1,1)
+
+        #pintar o selecionado de azul
+        pagina_adicionarvendas.ids[id_label].color = (0, 207/255, 219/255,1)
 
 
 MainApp().run()

@@ -61,15 +61,18 @@
             rows: 1
             pos_hint: {"right": 0.9, "top": 0.45}
             size_hint: 0.8, 0.1
-            Label:
+            LabelButton:
                 text: "kg"
                 id: unidades_kg
-            Label:
+                on_release: app.selecionar_unidadade("unidades_kg")
+            LabelButton:
                 text: "unidades"
                 id: unidades_unidades
-            Label:
+                on_release: app.selecionar_unidadade("unidades_unidades")
+            LabelButton:
                 text: "litros"
                 id: unidades_litros
+                on_release: app.selecionar_unidadade("unidades_litros")
 
         # Botôes
         LabelButton:
@@ -95,7 +98,7 @@
 
             # Pegando o email e a senha  e passando para a nossa função
             on_release: print("Adicionar venda")
-            text: "Adicoinar venda"
+            text: "Adicionar venda"
             pos_hint: {"right": 0.95, "top": 0.2}
             size_hint: 0.4, 0.2
 
