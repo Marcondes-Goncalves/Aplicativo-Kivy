@@ -31,8 +31,8 @@ class BannerVenda(GridLayout): # Por padrão a nossa classe será um GridLayout
         foto_produto = kwargs['foto_produto']
         data         = kwargs['data'        ]
         unidade      = kwargs['unidade'     ]
-        quantidade   = kwargs['quantidade'  ]
-        preco        = kwargs['preco'       ]
+        quantidade        = float(kwargs['quantidade'  ])
+        preco             = float(kwargs['preco'       ])
 
 
         esquerda        = FloatLayout()

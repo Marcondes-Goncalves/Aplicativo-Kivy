@@ -121,14 +121,18 @@ class MainApp(App):
             
             # Carregando as informações de vendas do usuário
             try: # preencher lista de vendas
-                vendas = requisicao_dic['vendas'][1:] # retorna uma lista de dicionario que contém a informação das vendas de cada cliente
+                #print(requisicao_dic)
+                vendas = requisicao_dic['vendas'] # retorna uma lista de dicionario que contém a informação das vendas de cada cliente
                 self.vendas = vendas
                 # Recuperando todos os ids da pagina homepage
                 pagina_homepage = self.root.ids['homepage'] # type: ignore[Unknown]
                 # Selecionando apenas o id lista_vendas
                 lista_vendas = pagina_homepage.ids['lista_vendas']
                 
-                for venda in vendas:
+                for id_venda in vendas:
+                    venda = vendas[id_venda]
+                    #print(id_venda)
+                    #print(venda)
                     # Pegando as chaves e o valores de cada dicionario venda e instânciando a nossa classe
                     banner = BannerVenda(cliente = venda['cliente'], foto_cliente = venda['foto_cliente'], produto = venda['produto'],
                             foto_produto = venda['foto_produto'], data = venda['data'], preco = venda['preco'], unidade = venda['unidade'],
@@ -138,7 +142,7 @@ class MainApp(App):
                     lista_vendas.add_widget(banner)
 
             except Exception as e:
-                print(f'Erro: {e}')
+                print(f'Erro ao preencher banner venda: {e}')
             # Fim do Carregando as informações de vendas do usuário
             
             # Preencher equipe de vendedores
@@ -156,7 +160,7 @@ class MainApp(App):
             self.mudarTela("homepage")
 
         except Exception as a:
-            print(a)
+            print(f'Erro ao cerregar informações do usuário: {a}')
 
 
     def adicionar_vendedor(self, id_vendedor_adicionado):
