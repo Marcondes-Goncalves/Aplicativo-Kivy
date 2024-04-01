@@ -92,7 +92,7 @@ class MainApp(App):
             self.id_token = id_token
 
             # as nossas requisições tem que terminar com .json no final do link para podermos manipular com python
-            requisicao = requests.get(f"https://aplicativovendashash-b0c09-default-rtdb.firebaseio.com/{self.local_id}.json") # pegando as informaçõs do usuário
+            requisicao = requests.get(f"https://aplicativovendashash-b0c09-default-rtdb.firebaseio.com/{self.local_id}.json?auth={self.id_token}") # pegando as informaçõs do usuário
             # pegando o json e transformando em um dicionario
             requisicao_dic:dict = requisicao.json()
 
@@ -182,7 +182,7 @@ class MainApp(App):
             else:
                 self.equipe = self.equipe + f",{id_vendedor_adicionado}"
                 info = f'{{"equipe": "{self.equipe}"}}'
-                requisicao = requests.patch(f"https://aplicativovendashash-b0c09-default-rtdb.firebaseio.com/{self.local_id}.json", data = info)
+                requisicao = requests.patch(f"https://aplicativovendashash-b0c09-default-rtdb.firebaseio.com/{self.local_id}.json?auth={self.id_token}", data = info)
 
                 mensagem_texto.text = "Vendedor adicionado com sucesso"
                 # Adiciona um novo Banner a nossa lista de vendedores
@@ -224,7 +224,7 @@ class MainApp(App):
         # OBS: o dado que será passado para o banco tem que ser convertido no padrão abaixo
         info = f'{{"avatar": "{foto}"}}'
 
-        requests.patch(f'https://aplicativovendashash-b0c09-default-rtdb.firebaseio.com/{self.local_id}.json', data = info)
+        requests.patch(f'https://aplicativovendashash-b0c09-default-rtdb.firebaseio.com/{self.local_id}.json?auth={self.id_token}', data = info)
         
         self.mudarTela('ajustespage')
 
@@ -331,7 +331,7 @@ class MainApp(App):
 
             info = f'{{"cliente": "{cliente}", "produto": "{produto}", "foto_cliente": "{foto_cliente}", "foto_produto": "{foto_produto}", "data": "{data}", "unidade": "{unidade}", "preco": "{preco}", "quantidade": "{quantidade}"}}'
 
-            requests.post(f"https://aplicativovendashash-b0c09-default-rtdb.firebaseio.com/{self.local_id}/vendas.json", data = info)
+            requests.post(f"https://aplicativovendashash-b0c09-default-rtdb.firebaseio.com/{self.local_id}/vendas.json?auth={self.id_token}", data = info)
 
             banner = BannerVenda(cliente = cliente, produto = produto, foto_cliente = foto_cliente, foto_produto = foto_produto, data = data, unidade = unidade, preco = preco, quantidade = quantidade)
 
@@ -342,13 +342,13 @@ class MainApp(App):
             lista_vendas.add_widget(banner)
 
             # pegando o total de vendas e atualizando o seu valor
-            requisicao = requests.get(f"https://aplicativovendashash-b0c09-default-rtdb.firebaseio.com/{self.local_id}/total_vendas.json")
+            requisicao = requests.get(f"https://aplicativovendashash-b0c09-default-rtdb.firebaseio.com/{self.local_id}/total_vendas.json?auth={self.id_token}")
             total_vendas = float(requisicao.json())
             total_vendas += preco
 
             # atualizando o total de vendas no banco
             info = f'{{"total_vendas": "{total_vendas}"}}'
-            requests.patch(f"https://aplicativovendashash-b0c09-default-rtdb.firebaseio.com/{self.local_id}.json", data = info)
+            requests.patch(f"https://aplicativovendashash-b0c09-default-rtdb.firebaseio.com/{self.local_id}.json?auth={self.id_token}", data = info)
 
             # atualizando o total de vendas na home page
             home_page = self.root.ids["homepage"] # type: ignore[Unknown]
