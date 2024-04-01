@@ -8,6 +8,9 @@ from kivy.lang import Builder
 # API para fazer requisições
 import requests
 
+#temos que importar essa lib quando usamos request e acessamos links com https para gerar o nosso certificado de segurança
+import certifi
+
 import os
 from datetime import date
 
@@ -20,6 +23,9 @@ from telas import *
 from botoes import *
 from bannervenda import *
 
+# certificado de segurança
+# sem esse certificado não conseguimos fazer as requisições no celular
+os.environ["SSL_CERT_FILE"] = certifi.where()
 
 # No arquivo kv está escrito o nosso gerenciador de telas
 GUI = Builder.load_file("main.kv")
